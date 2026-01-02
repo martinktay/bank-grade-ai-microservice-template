@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 from pydantic import BaseModel, Field, conint, confloat
 
 class EmploymentStatus(str, Enum):
@@ -16,3 +17,4 @@ class LoanApplication(BaseModel):
 class PredictionResponse(BaseModel):
     approved: bool = Field(..., description="Whether the loan is approved")
     confidence_score: float = Field(..., description="Confidence score of the model (0-1)")
+    reasons: List[str] = Field(default=[], description="List of reasons for the decision, especially if rejected")

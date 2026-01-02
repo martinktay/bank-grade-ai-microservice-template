@@ -24,7 +24,26 @@ async def predict_loan(application: LoanApplication):
     confidence = min(score + random.uniform(-0.1, 0.1), 1.0) # nosec
     approved = confidence > 0.6
     
+    reasons = []
+    if not approved:
+        if application.credit_score <= 600:
+            reasons.append("Credit score below 600")
+        if application.applicant_income < 30000:
+            reasons.append("Income too low for loan amount")
+        if application.employment_status not in ["employed", "self_employed"]:
+            reasons.append("Employment status required")
+            
+    # Struct log info
+    import logging
+    logger = logging.getLogger()
+    logger.info("Prediction made", extra={
+        "approved": approved,
+        "confidence": confidence,
+        "loan_amount": application.loan_amount
+    })
+
     return PredictionResponse(
         approved=approved,
-        confidence_score=round(confidence, 2)
+        confidence_score=round(confidence, 2),
+        reasons=reasons
     )
