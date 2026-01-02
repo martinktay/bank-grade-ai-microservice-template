@@ -1,91 +1,48 @@
-# Bank-Grade AI Microservice Template
+# Multi-Service AI Banking Suite
 
-A secure, production-ready FastAPI template designed for deploying AI models at Lloyds.
+A bank-grade monorepo containing AI microservices for loan inference and compliance auditing.
 
-## Features
+## Architecture
 
-*   **FastAPI**: High performance, easy to learn, fast to code, ready for production.
-*   **Pydantic**: Data validation and settings management using python type annotations.
-*   **Docker**: Multi-stage builds, non-root user execution for enhanced security.
-*   **CI/CD**: GitHub Actions workflow for automated testing and building.
-*   **Bank-Grade Security**:
-    *   Input validation with strict types.
-    *   Minimal Docker image surface.
-    *   Non-root user execution.
+The project is structured as a monorepo with multiple microservices:
 
-## System Architecture
+1.  **Loan Inference Service** (`services/loan_inference`):
+    -   Predicts loan approval probabilities.
+    -   Features: AI Explainability, Correlation IDs, Structured Logging, **SQLite Persistence**.
+    -   Port: `8000`
+    -   History: [http://127.0.0.1:8000/api/v1/history](http://127.0.0.1:8000/api/v1/history)
 
-The microservice is designed to fit into a scalable architecture:
-
-```mermaid
-graph LR
-    User[Client Application] -->|HTTPS| LB[Load Balancer]
-    LB -->|Round Robin| Service[AI Microservice]
-    Service -->|Input Data| Model[AI Model Inference]
-    Model -->|Prediction + Confidence| Service
-    Service -->|JSON Response| User
-```
-
-1.  **Client Application**: Sends a POST request with applicant data.
-2.  **Load Balancer**: Distributes traffic across multiple instances of the microservice.
-3.  **AI Microservice (This Template)**:
-    *   Validates input data against the `LoanApplication` schema.
-    *   Passes clean data to the model.
-    *   Formats the output into a standardized `PredictionResponse`.
-4.  **AI Model Inference**: The core logic (currently simulated) containing the business rules or ML model.
+2.  **Compliance Auditor Service** (`services/compliance_auditor`):
+    -   Audits loan decisions for regulatory compliance.
+    -   Port: `8001`
 
 ## Setup
 
-### Local Development
-
-1.  **Clone the repository**:
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
-
-2.  **Install dependencies**:
+1.  Clone the repository.
+2.  Install dependencies:
     ```bash
     pip install -r requirements.txt
     ```
 
-3.  **Run the application**:
-    ```bash
-    uvicorn app.main:app --reload
-    ```
-    The API will be available at `http://localhost:8000`.
-    Documentation: `http://localhost:8000/docs`
+## Running the Services
 
-### Docker
+You can run each service in a separate terminal.
 
-1.  **Build the image**:
-    ```bash
-    docker build -t lloyds-ai-service .
-    ```
-
-2.  **Run the container**:
-    ```bash
-    docker run -p 8000:8000 lloyds-ai-service
-    ```
-
-## API Usage
-
-**POST** `/api/v1/predict`
-
-**Request Body**:
-```json
-{
-  "applicant_income": 50000,
-  "credit_score": 750,
-  "loan_amount": 10000,
-  "employment_status": "employed"
-}
+### Service 1: Loan Inference
+```bash
+uvicorn services.loan_inference.app.main:app --port 8000 --reload
 ```
+Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-**Response**:
-```json
-{
-  "approved": true,
-  "confidence_score": 0.85
-}
+### Service 2: Compliance Auditor
+```bash
+uvicorn services.compliance_auditor.app.main:app --port 8001 --reload
+```
+Docs: [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs)
+
+## Testing
+
+Run tests from the root directory:
+```bash
+pytest services/loan_inference/tests/
 ```
