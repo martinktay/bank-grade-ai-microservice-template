@@ -46,3 +46,19 @@ Run tests from the root directory:
 ```bash
 pytest services/loan_inference/tests/
 ```
+
+## 🚀 Live Showcase: The "Bait" Request
+
+We tested the system with a subtle scenario to prove the **Gemini Agent's** reasoning capabilities.
+
+**Scenario**: High Income (£85,000), Excellent Credit (740), but Employment is **"freelance"**.
+
+**Agent's Audit Response:**
+> *"The applicant exhibits a very strong financial profile... The 'freelance' status acts as a variable income indicator, but the high credit score suggests reliable debt management. The decision to approve is logically sound and consistent with risk appetite."*
+
+### 📊 Dashboard
+The full banking portal is available to visualize these decisions.
+```bash
+streamlit run services/dashboard/app.py
+```
+Access: [http://localhost:8501](http://localhost:8501)
