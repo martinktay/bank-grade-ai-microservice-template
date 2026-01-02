@@ -6,7 +6,7 @@ import time
 
 # --- Page Config ---
 st.set_page_config(
-    page_title="Banks AI Loan Governance Portal",
+    page_title="Automated AI Loan Governance Suite",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -41,7 +41,7 @@ st.markdown("""
 # --- Header ---
 col_header_1, col_header_2 = st.columns([3, 1])
 with col_header_1:
-    st.title("🏦 Banks AI Loan Governance Portal")
+    st.title("🏦 Automated AI Loan Governance Suite")
 with col_header_2:
     st.caption("v1.0.0 | System Status: 🟢 Online")
 
