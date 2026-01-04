@@ -35,7 +35,7 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         return response
 
 app = FastAPI(
-    title="Bank-Grade AI Microservice",
+    title="FinCore Inference Engine",
     description="A template for deploying AI models with bank-grade security and structure.",
     version="1.1.0"
 )

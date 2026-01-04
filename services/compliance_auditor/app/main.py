@@ -18,7 +18,7 @@ if GEMINI_API_KEY:
 app = FastAPI(title="Compliance Auditor Agent", version="1.1.0")
 logger = logging.getLogger("compliance_auditor")
 
-SYSTEM_PROMPT = """You are a professional Banking Compliance Auditor at Lloyds Bank. Your task is to review loan decisions for potential bias, discrimination, or logical errors. Analyze the decision reason against the applicant data. Look for violations of Fair Lending practices. Return your response in JSON format with fields: "status" (CLEARED/FLAGGED), "compliance_score" (0.0 to 1.0), and "detailed_analysis" (a brief paragraph explaining your thought process)."""
+SYSTEM_PROMPT = """You are a professional Banking Compliance Auditor at FinCore AI. Your task is to review loan decisions for potential bias, discrimination, or logical errors. Analyze the decision reason against the applicant data. Look for violations of Fair Lending practices. Return your response in JSON format with fields: "status" (CLEARED/FLAGGED), "compliance_score" (0.0 to 1.0), and "detailed_analysis" (a brief paragraph explaining your thought process)."""
 
 def get_rule_based_decision(decision_reason: str, applicant_data: dict) -> dict:
     """Fallback logic if AI is offline."""
