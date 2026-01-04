@@ -12,10 +12,11 @@ COPY --from=builder /root/.local /home/appuser/.local
 ENV PATH=/home/appuser/.local/bin:$PATH
 
 # Copy Service Code
-# Assumes build context is root
-COPY services/loan_inference/app ./app
+COPY services/compliance_auditor/app ./app
+# Copy .env if needed, though safer to pass via docker-compose
+# COPY services/compliance_auditor/.env .env
 
 RUN chown -R appuser:appuser /app
 USER appuser
-EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 8001
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]

@@ -53,10 +53,13 @@ async def predict_loan(application: LoanApplication, db: AsyncSession = Depends(
     # --- golden Link: Call Compliance Auditor ---
     audit_data = None
     try:
+        import os
+        auditor_url = os.getenv("AUDITOR_URL", "http://127.0.0.1:8001/audit")
+        
         decision_reason = reasons[0] if reasons else "Met all criteria"
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "http://127.0.0.1:8001/audit",
+                auditor_url,
                 json={
                     "decision_reason": decision_reason,
                     "applicant_data": application.model_dump()

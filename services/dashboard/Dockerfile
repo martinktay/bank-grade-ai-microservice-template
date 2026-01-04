@@ -11,11 +11,10 @@ RUN adduser --disabled-password --gecos '' appuser
 COPY --from=builder /root/.local /home/appuser/.local
 ENV PATH=/home/appuser/.local/bin:$PATH
 
-# Copy Service Code
-# Assumes build context is root
-COPY services/loan_inference/app ./app
+# Copy Dashboard Code
+COPY services/dashboard/app.py ./app.py
 
 RUN chown -R appuser:appuser /app
 USER appuser
-EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 8501
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

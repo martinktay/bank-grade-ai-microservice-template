@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  loan_inference:
+    build:
+      context: .
+      dockerfile: services/loan_inference/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - AUDITOR_URL=http://compliance_auditor:8001/audit
+      - DATABASE_URL=sqlite:////app/data/bank.db
+    volumes:
+      - ./data:/app/data
+    networks:
+      - fincore_net
+
+  compliance_auditor:
+    build:
+      context: .
+      dockerfile: services/compliance_auditor/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    networks:
+      - fincore_net
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: services/dashboard/Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://loan_inference:8000/api/v1
+    depends_on:
+      - loan_inference
+      - compliance_auditor
+    networks:
+      - fincore_net
+
+networks:
+  fincore_net:
+    driver: bridge
