@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from services.loan_inference.app.main import app
+from unittest.mock import patch, AsyncMock
 
 client = TestClient(app)
 
@@ -8,7 +9,22 @@ def test_health_check():
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
-def test_predict_loan_approved():
+@patch("httpx.AsyncClient.post", new_callable=AsyncMock)
+def test_predict_loan_approved(mock_post):
+    # Mock successful auditor response
+    # Create a proper mock response object
+    from unittest.mock import MagicMock
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "status": "CLEARED",
+        "compliance_score": 1.0,
+        "comments": ["Automated Check Cleared."],
+        "mode": "GEN_AI",
+        "audit_id": "test-123"
+    }
+    mock_post.return_value = mock_response
+
     payload = {
         "applicant_income": 50000,
         "credit_score": 750,
@@ -23,7 +39,21 @@ def test_predict_loan_approved():
     assert "confidence_score" in data
     assert data["approved"] is True
 
-def test_predict_loan_rejected():
+@patch("httpx.AsyncClient.post", new_callable=AsyncMock)
+def test_predict_loan_rejected(mock_post):
+    # Mock successful auditor response (even if loan rejected by rules, auditor is called)
+    from unittest.mock import MagicMock
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "status": "CLEARED", 
+        "compliance_score": 1.0,
+        "comments": ["No compliance issues found."],
+        "mode": "GEN_AI",
+        "audit_id": "test-456"
+    }
+    mock_post.return_value = mock_response
+
     payload = {
         "applicant_income": 10000,
         "credit_score": 400,

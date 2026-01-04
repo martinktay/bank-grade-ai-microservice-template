@@ -121,8 +121,10 @@ with st.sidebar:
     with c5: st.write("✅")
     with c6: st.caption("Immutable Ledger (SQLite)")
 
+import os
+
 # --- Constants ---
-API_URL = "http://127.0.0.1:8000/api/v1"
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/api/v1")
 
 # --- Main Logic ---
 
