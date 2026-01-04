@@ -16,15 +16,15 @@ st.set_page_config(
 # --- Custom CSS (Deep Slate & Platinum Theme) ---
 st.markdown("""
 <style>
-    /* Main Background */
+    /* Main Background - White */
     .stApp {
-        background-color: #1E293B;
-        color: #F8FAFC;
+        background-color: #FFFFFF;
+        color: #0F172A;
     }
     
-    /* Headers - Platinum */
+    /* Headers - Slate Dark */
     h1, h2, h3, h4, h5, h6 {
-        color: #F8FAFC !important;
+        color: #0F172A !important;
         padding-top: 0rem !important;
     }
     h1 { font-size: 1.8rem !important; }
@@ -32,31 +32,37 @@ st.markdown("""
     
     /* Metrics & Text */
     div[data-testid="stMetricValue"] {
-        color: #F8FAFC !important;
+        color: #0F172A !important;
         font-size: 1.2rem !important;
     }
     div[data-testid="stMetricLabel"] {
-        color: #94A3B8 !important;
+        color: #64748B !important;
     }
     p, li, label {
-        color: #E2E8F0 !important;
+        color: #334155 !important;
     }
     
     /* Cards/Containers */
     div[data-testid="stExpander"] {
-        background-color: #334155 !important;
+        background-color: #F1F5F9 !important;
         border-radius: 8px;
-        border: 1px solid #475569;
+        border: 1px solid #E2E8F0;
     }
     
     /* Sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #0F172A;
+        background-color: #F8FAFC;
     }
     
     /* Table */
     div[data-testid="stDataFrame"] {
         font-size: 0.85rem !important;
+    }
+
+    /* Force Header Visibility */
+    header {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -204,21 +210,21 @@ if st.session_state.last_result:
             value = pd_value * 100,
             title = {'text': "Est. Probability of Default (%)"},
             gauge = {
-                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "white"},
+                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#334155"},
                 'bar': {'color': "#ef4444" if not approved else "#22c55e"},
-                'bgcolor': "#1E293B",
+                'bgcolor': "#FFFFFF",
                 'borderwidth': 2,
-                'bordercolor': "gray",
+                'bordercolor': "#E2E8F0",
                 'steps': [
-                    {'range': [0, 20], 'color': '#064e3b'},
-                    {'range': [20, 50], 'color': '#ca8a04'},
-                    {'range': [50, 100], 'color': '#7f1d1d'}
+                    {'range': [0, 20], 'color': '#d1fae5'}, # Light Green
+                    {'range': [20, 50], 'color': '#fef08a'}, # Light Yellow
+                    {'range': [50, 100], 'color': '#fecaca'} # Light Red
                 ],
             }
         ))
         fig.update_layout(
-            paper_bgcolor="#1E293B",
-            font={'color': "#F8FAFC", 'family': "Arial"},
+            paper_bgcolor="#FFFFFF",
+            font={'color': "#0F172A", 'family': "Arial"},
             margin=dict(l=20, r=20, t=50, b=20),
             height=250
         )

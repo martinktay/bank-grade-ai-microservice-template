@@ -14,6 +14,11 @@ services:
       - ./data:/app/data
     networks:
       - fincore_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8000/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   compliance_auditor:
     build:
@@ -25,6 +30,11 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     networks:
       - fincore_net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8001/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   dashboard:
     build:
@@ -35,8 +45,10 @@ services:
     environment:
       - API_URL=http://loan_inference:8000/api/v1
     depends_on:
-      - loan_inference
-      - compliance_auditor
+      loan_inference:
+        condition: service_healthy
+      compliance_auditor:
+        condition: service_healthy
     networks:
       - fincore_net
 
